@@ -11,6 +11,7 @@ MySystemTrayIcon{
     property TrayMessageWindow trayMessageWindow
     signal triggered(var arg)
     
+
     visible: true
     windowIcon: "qrc:/images/avatar.png"
     menu: myqq.loginStatus == QQ.LoginFinished?menu2:menu1
@@ -25,6 +26,7 @@ MySystemTrayIcon{
     function iconShakeStart(){//开启图标闪动
         windowIcon = currentInfo.avatar40//设置图标
         timer_shake.start()
+        console.log("开启了头像闪动")
     }
     function iconShakeStop(){//停止鼠标闪动
         timer_shake.stop()
@@ -91,7 +93,7 @@ MySystemTrayIcon{
         target: myqq
         onNewMessage:{
             if(!myqq.isChatPageExist(fromUin, type)){//判断聊天页面是否存在，如果存在的话 不用提示新消息
-                //console.debug("收到了新的未读消息："+currentInfo)
+                console.debug("收到了新的未读消息："+currentInfo)
                 if(type==QQItemInfo.Friend){//如果是qq消息
                     currentInfo = myqq.createFriendInfo(fromUin)
                 }else if(type==QQItemInfo.Group){//如果是群消息
@@ -101,7 +103,6 @@ MySystemTrayIcon{
                 }
                 trayMessageWindow.appendModel(currentInfo)
                 iconShakeStart()//开始闪动
-                //console.debug(currentInfo)
             }
         }
     }
@@ -123,7 +124,7 @@ MySystemTrayIcon{
 
     MyMenu{
         id:menu1
-        styleSource: "../../style/menuStyle.css"
+        styleSource: "qrc:/style/menuStyle.css"
         MyMenuItem{
             text: "打开主面板"
             onTriggered: {
@@ -138,7 +139,8 @@ MySystemTrayIcon{
     
     MyMenu{
         id: menu2
-        styleSource: "../../style/menuStyle.css"
+
+        styleSource: "qrc:/style/menuStyle.css"
         MyMenuItem{
             text: "我在线上"
             icon: "qrc:/images/imonline.png"

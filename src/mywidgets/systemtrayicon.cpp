@@ -61,7 +61,11 @@ int SystemTrayIcon::height() const
 void SystemTrayIcon::setWindowIcon(QUrl icon)
 {
     if( icon!=m_windowIcon ){
-        QString str = icon.toString ();
+        QString str = icon.toLocalFile();
+        if(str == ""){
+            str = icon.toString();
+        }
+
         if( str.mid (0, 3) == "qrc")
             str = str.mid (3, str.count ()-3);
         systempTray->setIcon (QIcon(str));
@@ -113,7 +117,11 @@ QString MyMenuItem::shortcut() const
 void MyMenuItem::setIcon(QUrl icon)
 {
     if( icon!=m_myIcon ){
-        QString str = icon.toString ();
+        QString str = icon.toLocalFile();
+        if(str == ""){
+            str = icon.toString();
+        }
+
         if( str.mid (0, 3) == "qrc")
             str = str.mid (3, str.count ()-3);
         QAction::setIcon (QIcon(str));
@@ -203,12 +211,24 @@ void MyMenu::setStyleSource(QUrl arg)
 {
     if (m_styleSource != arg) {
         m_styleSource = arg;
-        QFile file(arg.toLocalFile ());
+
+        QString str = arg.toLocalFile();
+        if(str == ""){
+            str = arg.toString();
+            if(str==""){
+                return;
+            }
+        }
+
+        if( str.mid (0, 3) == "qrc")
+            str = str.mid (3, str.count ()-3);
+
+        QFile file(str);
         
         if(file.open (QIODevice::ReadOnly)){
             menu->setStyleSheet (file.readAll ());
         }else{
-            qDebug()<<"打开"+arg.toLocalFile ()+"失败；"<<file.errorString ();
+            qDebug()<<"打开"+str+"失败；"<<file.errorString ();
         }
         file.close ();
         emit styleSourceChanged(arg);

@@ -50,6 +50,8 @@ Window{
                 source: mysource
                 x:5
                 width: parent.height-10
+                height: width
+                sourceSize.width: width
                 anchors.verticalCenter: parent.verticalCenter
                 onLoadError: {
                     source = "qrc:/images/avatar.png"
